@@ -1,4 +1,9 @@
 ##ici c'est un fichier qu'on a fait manuellement, qui permet de dégageger ce que l'on ne veut pas que GIT voit. 
 ##En l'occurrence, node_module, c'est très gros, c'est dommage de le faire travailler sur ça. Donc on l'enlève. 
 ##Pour ES  build c'est la même chose, pour le dossier dist. 
+
+##Je suis un artisan qui fait des vêtemnets, des robes. je travaille avec un autre. Moi je fais la partie chaussure, et l'autre fait une semelle. 
+##J'ai beaucoup de travail, je le découpe en pluiseurs étapes. Lacets, etc. quand je fais une "étape", c'est un COMMIT !
+##Le push, c'est le fait de publier en ligne le truc
+##Quand plusieurs personnes compactent leur travail → c'est un merge, et c'est forcément fait sur deux branches différentes
 node_modules

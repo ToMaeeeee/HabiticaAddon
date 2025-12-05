@@ -9,7 +9,8 @@
   "scripts": {
     "build": "node esbuild.config.js",
     "build:watch": "node esbuild.config.js --watch",
-    "push": "clasp push"
+    "push": "clasp push",
+    "gp": "git push origin HEAD"
   },
   "devDependencies": {
     "esbuild": "^0.27.0"
