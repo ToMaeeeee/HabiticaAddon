@@ -1,0 +1,17 @@
+{
+  "name": "habiticaaddon",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "build": "node esbuild.config.js",
+    "build:watch": "node esbuild.config.js --watch",
+    "push": "clasp push"
+  },
+  "devDependencies": {
+    "esbuild": "^0.27.0"
+  }
+}

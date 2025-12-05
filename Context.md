@@ -1,0 +1,1 @@
+We are in a project destinated to be pushed on GAS, import are not neccessary as GAS flatten every files into one.
