@@ -1,4 +1,5 @@
 
 function foo() {
-    new GenerateDailyShop().handle()
+    new GenerateDailyShop(loadItemsFromSheet).handle()
+
 }

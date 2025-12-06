@@ -47,9 +47,7 @@ class HabiticaAPI {
     }
 
     var url = config.HABITICA_BASE_URL + config.TASK_URL
-    const response = UrlFetchApp.fetch(url, params)
-    console.log({ response })
-    console.log({ response: response.toString() })
+    UrlFetchApp.fetch(url, params)
   }
 
 

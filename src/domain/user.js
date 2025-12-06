@@ -59,7 +59,6 @@ class User {
     calculateEquipmentStats() {
         const stats = { str: 0, con: 0, int: 0, per: 0 };
         this.gears.forEach(gear => {
-            console.log({ gear, bonus: this.calculateGearBonusV2(gear, 'str') });
             stats.str += this.calculateGearBonusV2(gear, 'str');
             stats.con += this.calculateGearBonusV2(gear, 'con');
             stats.int += this.calculateGearBonusV2(gear, 'int');

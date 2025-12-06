@@ -10,14 +10,23 @@
 
 class GenerateDailyShop {
 
+  constructor(loadItems) {
+    this.loadItems = loadItems
+  }
+
   handle() {
+
     //DEFINITION DU TABLEAU QUI VA CONTENIR ITEMS
-    const itemsLibrary = loadItemsFromSheet()
+    // 
+    // ÇA ça ne fonctionne pas pour l'inversion de dépendance
+    //const itemsLibrary = loadItemsFromSheet()
+    const itemsLibrary = this.loadItems()
+    //à dégager
+    console.log(itemsLibrary[""])
     const rarityMatrix = rarityTable
     const ownedItems = ITEM_OWNED
     const user = getHabiticaUser()
     const loot = generateLootForUser2(user, itemsLibrary, rarityMatrix, ownedItems, numberLoot);
-    console.log({ loot })
     publishNewShop(loot)
   }
 
@@ -42,7 +51,12 @@ class GenerateDailyShop {
   // Logger.log(JSON.stringify({ stat: user.stats }, null, 2))
 
 
-
+  envoyerMessage10h() {
+    const payload = this.testLootForUser2()
+    const messageFormate = formatLootMessage(payload);
+    sendTestMessage(messageFormate)
+    Logger.log(messageFormate)
+  }
 
 
 }
@@ -50,31 +64,7 @@ class GenerateDailyShop {
 
 
 
-
-
-//===========================================================================================
-//===========================================================================================
-//===========================================================================================
-
-/*
-function initItems() {
-  if (!ITEMS) ITEMS = loadItemsFromSheet();
-
-*/
-
-
-
-
-
-
-function envoyerMessage10h() {
-  const payload = testLootForUser2()
-  const messageFormate = formatLootMessage(payload);
-  sendTestMessage(messageFormate)
-  Logger.log(messageFormate)
-}
-
-
+//ÇA C'EST A METTRE !!!!! (INFRA)
 
 //FORMATTAGE
 function formatLootMessage(loot) {
