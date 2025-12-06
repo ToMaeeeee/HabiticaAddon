@@ -7,7 +7,6 @@ function loadSpecialEquipmentFromSheet(userId) {
 
     /*************  ✨ Windsurf Command 🌟  *************/
     data.forEach(row => {
-        Logger.log({ row })
         console.log({ row })
         if (row.every(cell => !cell)) return;
 
