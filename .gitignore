@@ -6,4 +6,9 @@
 ##J'ai beaucoup de travail, je le découpe en pluiseurs étapes. Lacets, etc. quand je fais une "étape", c'est un COMMIT !
 ##Le push, c'est le fait de publier en ligne le truc
 ##Quand plusieurs personnes compactent leur travail → c'est un merge, et c'est forcément fait sur deux branches différentes
+
+
+##Donc on ajoute les fichiers au regaard de GIT : git add . (. pour tout)
+##On commit le travail git commit -m "coucouc"
+##On push git push origin HEAD ou npm run gp
 node_modules

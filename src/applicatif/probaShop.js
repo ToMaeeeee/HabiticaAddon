@@ -8,6 +8,11 @@
 //---------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------
 
+//Explication mémo PID en bas du sheet
+
+
+
+
 class GenerateDailyShop {
 
   constructor(loadItems) {
@@ -22,12 +27,13 @@ class GenerateDailyShop {
     //const itemsLibrary = loadItemsFromSheet()
     const itemsLibrary = this.loadItems()
     //à dégager
-    console.log(itemsLibrary[""])
+    console.log({ library: itemsLibrary["A"] })
     const rarityMatrix = rarityTable
     const ownedItems = ITEM_OWNED
     const user = getHabiticaUser()
     const loot = generateLootForUser2(user, itemsLibrary, rarityMatrix, ownedItems, numberLoot);
     publishNewShop(loot)
+    return loot
   }
 
 
@@ -361,3 +367,68 @@ function generateLootForUser2(user, itemsLibrary, rarityTable, itemOwned, count)
 }
 
 
+
+
+
+
+
+/*
+
+
+//Principe d'inversion de dépendance. PID 
+// j'ai une fonction 
+
+function calculatestuff() {
+
+  const truc = loadfromGGsheet()
+  const resultat = calcule(truc)
+
+  return resultat
+}
+
+function calcule() { }
+
+//
+
+function calculatestuff(load) {
+
+  const truc = load()
+  const resultat = calcule(truc)
+
+  return resultat
+}
+
+function calcule() { }
+
+// AVEC un constructor, c'est identique identique
+
+class Calculatestuff {
+  constructor() {
+  //A NOTER QUE CE QUE L'ON MET LA, CE SONT LES PARAMETRES DE LA FONCTION EQUIVALENTE
+
+  }
+  handle() {
+    const truc = loadfromGGsheet()
+    const resultat = calcule(truc)
+
+    return resultat
+  }
+}
+
+function calcule() { }
+
+//
+
+class Calculatestuff {
+  constructor(load) {
+    this.load = load
+
+  }
+  handle() {
+    const truc = this.load()
+    const resultat = calcule(truc)
+
+    return resultat
+  }
+}
+*/

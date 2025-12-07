@@ -1,21 +1,23 @@
 // Fonction pour lire le Sheet et créer le tableau ITEMS
-function loadSpecialEquipmentFromSheet(userId) {
+function loadSpecialEquipmentFromSheet() {
     const sheet = SpreadsheetApp.openById(SHEET_ID).getSheetByName(SPECIAL_EQUIPMENT_SHEET_NAME);
     const data = sheet.getDataRange().getValues();
     const headers = data.shift(); // récupère la première ligne comme entêtes
     const itemsByRarity = {};
 
-    /*************  ✨ Windsurf Command 🌟  *************/
+
     data.forEach(row => {
-        console.log({ row })
         if (row.every(cell => !cell)) return;
 
         const obj = {};
         headers.forEach((h, i) => obj[h] = row[i]);
-        const item = new Item(
+        if (!obj.owned) return
+        const item = new ItemSpecialEquipment(
             obj.name,
             obj.rarity,
             obj.effect,
+            obj.syng2,
+            obj.syng3,
             obj.price || 0,
             obj.levelReq,
             obj.weight,
@@ -26,7 +28,6 @@ function loadSpecialEquipmentFromSheet(userId) {
         itemsByRarity[item.rarity].push(item);
     });
 
-    /*******  75237e72-a9e1-4538-8d19-e9374f5f88a4  *******/
-    Logger.log("Chargement des items du Sheet réussi");
-    return itemsByRarity;
+    Logger.log("Chargement des items spéciaux du Sheet réussi");
+    return new SpecialEquipement(itemsByRarity);
 }

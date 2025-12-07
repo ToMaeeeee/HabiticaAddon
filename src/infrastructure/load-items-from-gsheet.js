@@ -6,6 +6,7 @@ function loadItemsFromSheet() {
     const itemsByRarity = {};
 
     data.forEach(row => {
+        if (row.every(cell => !cell)) return;
         const obj = {};
         headers.forEach((h, i) => obj[h] = row[i]);
         const item = new Item(
