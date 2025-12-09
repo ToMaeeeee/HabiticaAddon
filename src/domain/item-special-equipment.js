@@ -1,8 +1,8 @@
 class ItemSpecialEquipment {
-    constructor(name, rarity, effect, syng2, syng3, price, levelReq = 1, weight = 1, nomSet = null) {
+    constructor(name, rarity, syng1, syng2, syng3, price, levelReq = 1, weight = 1, nomSet = null) {
         this.name = name;
         this.rarity = rarity || "S+"; // "Common", "Rare", etc.
-        this.effect = effect;
+        this.syng1 = syng1;
         this.syng2 = syng2;
         this.syng3 = syng3;
         this.price = price;

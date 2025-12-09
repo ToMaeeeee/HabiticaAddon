@@ -3,7 +3,7 @@ function loadSpecialEquipmentFromSheet() {
     const sheet = SpreadsheetApp.openById(SHEET_ID).getSheetByName(SPECIAL_EQUIPMENT_SHEET_NAME);
     const data = sheet.getDataRange().getValues();
     const headers = data.shift(); // récupère la première ligne comme entêtes
-    const itemsByRarity = {};
+    const itemsBySet = new Map();
 
 
     data.forEach(row => {
@@ -15,7 +15,7 @@ function loadSpecialEquipmentFromSheet() {
         const item = new ItemSpecialEquipment(
             obj.name,
             obj.rarity,
-            obj.effect,
+            obj.syng1,
             obj.syng2,
             obj.syng3,
             obj.price || 0,
@@ -23,11 +23,13 @@ function loadSpecialEquipmentFromSheet() {
             obj.weight,
             obj.nomSet || null //Charger le set s'il existe
         );
-
-        if (!itemsByRarity[item.rarity]) itemsByRarity[item.rarity] = [];
-        itemsByRarity[item.rarity].push(item);
+        //NOTATION TERNAIRE
+        !itemsBySet.has(item.nomSet) //if (condittion)
+            ? itemsBySet.set(item.nomSet, [item]) //itemsBySet[item.nomSet] = []; //if yes →
+            : itemsBySet.get(item.nomSet).push(item); //if non → 
     });
 
+    console.log({ itemsBySet })
     Logger.log("Chargement des items spéciaux du Sheet réussi");
-    return new SpecialEquipement(itemsByRarity);
+    return new SpecialEquipement(itemsBySet);
 }

@@ -53,6 +53,7 @@ function getUserTasks() {
 }
 
 function getAllRewards() {
-    const tasks = this.getUserTasks();
-    return tasks.filter(t => t.type === "reward");
+    const tasks = getUserTasks();
+    const rewards = tasks.filter(t => t.type === "reward");
+    return rewards
 }

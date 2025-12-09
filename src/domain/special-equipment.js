@@ -1,9 +1,9 @@
 class SpecialEquipement {
-    constructor(list) {
+    constructor(specialEquipementsBySets) {
         //faire une map pour les sets d'équipement ensemble. 
         //[set de truc : {}, set de truc2 : {}]
-        this.list = new Map() // {}
-        this.list.set(setName, equipment)  // { "kroll" : { name: "Heaume de Kroll-Dur", weight: 5, set: "kroll" } }
+        this.specialEquipementsBySets = specialEquipementsBySets // {}
+        // this.list.set(setName, equipment)  // { "kroll" : { name: "Heaume de Kroll-Dur", weight: 5, set: "kroll" } }
     }
 
     getBonus() {
@@ -16,11 +16,24 @@ class SpecialEquipement {
     }
 
     getDescription() {
-        //pour chaque item de la liste
-        const equipmentDescriptors = []
-        for (const equipment in this.list) {
-            equipmentDescriptors.push(equipment.description)
-        }
-        return "Pleurs de sang et autre truc swag"
+        let description = "";
+
+        this.specialEquipementsBySets.forEach((items, setName) => {
+            const synergisticEffects =
+                items.length === 3 ? items[0].syng3 :
+                    items.length === 2 ? items[0].syng2 :
+                        items[0].syng1;
+
+            description += `### **${setName}**\n`;
+            description += `**Equipment:** _${items.map(item => item.name).join(" | ")}_\n\n`;
+
+            synergisticEffects.split('|').map(e => e.trim()).forEach(effect => {
+                description += `- **${effect}**\n`;
+            })
+
+            description += "\n"; // spacing between sets
+        });
+
+        return description.trim();
     }
 }

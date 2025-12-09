@@ -21,6 +21,29 @@ class HabiticaAPI {
 
   //fonction qui affiche nos infos dans le shop
 
+  createNewPopupifAlreadyExist(popUp) {
+    const habiticaPopUp = this.popUpMapperMoivsHabitica(popUp)
+    var params = {
+      "method": "post",
+      "headers": config.HEADERS,
+      "contentType": "application/json",
+      "payload": JSON.stringify(habiticaPopUp), // Rightmost button goes on top
+      "muteHttpExceptions": true,
+    }
+
+    const rewards = getAllRewards()
+    const previousPopUp = rewards.find(t => t.alias === popUp.id)
+    //[]
+
+    //detruire :
+    deleteTask(previousPopUp.id)
+
+    var url = config.HABITICA_BASE_URL + config.TASK_URL
+    UrlFetchApp.fetch(url, params)
+  }
+
+
+
   createNewPopup(popUp) {
     const habiticaPopUp = this.popUpMapperMoivsHabitica(popUp)
     var params = {
@@ -57,7 +80,7 @@ class HabiticaAPI {
   taskMapperMoivsHabitica(task) {
     //doit renvoyer la forme que habitica doit avoir
     return {
-      id: task.id,
+      alias: task.id,
       type: "habit",
       text: task.title,
       notes: task.subtitle,
@@ -68,7 +91,7 @@ class HabiticaAPI {
 
   popUpMapperMoivsHabitica(popUp) {
     return {
-      id: popUp.id,
+      alias: popUp.id,
       type: "reward",
       text: popUp.title,
       notes: popUp.description,
@@ -87,6 +110,3 @@ class HabiticaAPI {
   }
 
 }
-
-
-
