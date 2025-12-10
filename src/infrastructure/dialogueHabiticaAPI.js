@@ -36,7 +36,8 @@ class HabiticaAPI {
     //[]
 
     //detruire :
-    deleteTask(previousPopUp.id)
+    if (previousPopUp) deleteTask(previousPopUp.id)
+
 
     var url = config.HABITICA_BASE_URL + config.TASK_URL
     UrlFetchApp.fetch(url, params)

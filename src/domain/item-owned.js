@@ -1,4 +1,4 @@
-const ITEM_OWNED = {
+/*const ITEM_OWNED = {
 
     "Heaume de Kroll-Dur": false,
     "Cœur de Fer": false,
@@ -24,3 +24,5 @@ const ITEM_OWNED = {
     "Kitab al-Azif": false,
     "Nécromancie de Thay": false,
 };
+
+*/

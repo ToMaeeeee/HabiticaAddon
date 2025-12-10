@@ -10,7 +10,8 @@
     "build": "node esbuild.config.js",
     "build:watch": "node esbuild.config.js --watch",
     "push": "clasp push",
-    "gp": "git push origin HEAD"
+    "gp": "git push origin HEAD",
+    "init:webhook": "node ./src/Tools/init-webhook.js"
   },
   "devDependencies": {
     "esbuild": "^0.27.0"

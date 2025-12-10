@@ -15,8 +15,11 @@
 
 class GenerateDailyShop {
 
-  constructor(loadItems) {
+  constructor(loadItems, pidLoadSpecialEquipement, pidGetUser, pidPublishNewShop) {
     this.loadItems = loadItems
+    this.pidLoadSpecialEquipement = pidLoadSpecialEquipement
+    this.pidGetUser = pidGetUser
+    this.pidPublishNewShop = pidPublishNewShop
   }
 
   handle() {
@@ -29,10 +32,11 @@ class GenerateDailyShop {
     //à dégager
     console.log({ library: itemsLibrary["A"] })
     const rarityMatrix = rarityTable
-    const ownedItems = ITEM_OWNED
-    const user = getHabiticaUser()
+    //const ownedItems = ITEM_OWNED
+    const ownedItems = this.pidLoadSpecialEquipement().getOwnedList()
+    const user = this.pidGetUser()
     const loot = generateLootForUser2(user, itemsLibrary, rarityMatrix, ownedItems, numberLoot);
-    publishNewShop(loot)
+    this.pidPublishNewShop(loot)
     return loot
   }
 
@@ -215,8 +219,7 @@ function calculerPenalitesPoidsSet(item, alreadyOwn, itemsLibrary) { //On passer
 
 
 
-  // 1. Filtrer les objets possédés (TRUE uniquement dans AlreadyOwn)
-  const nomsPossedes = Object.keys(alreadyOwn).filter((e) => alreadyOwn[e] === true) //[gants de truc, robe de truc, voile de truc]
+  // 1. Filtrer les objets possédés (TRUE uniquement dans AlreadyOwn) //[gants de truc, robe de truc, voile de truc]
 
   // 2. Récupérer les objets complets //On ne peut pas faire find car ITEMS ce n'est pas un tableau mais un objet !!!
   //const objetsPossedes = nomsPossedes.map(gantsTruc => ITEMS.find(e => e.nom === gantsTruc))
@@ -231,7 +234,7 @@ function calculerPenalitesPoidsSet(item, alreadyOwn, itemsLibrary) { //On passer
   }
   */
 
-  const objetsPossedes = nomsPossedes.map(e => trouverObjetParNomDansITEMS(e, itemsLibrary))
+  const objetsPossedes = alreadyOwn.map(e => trouverObjetParNomDansITEMS(e, itemsLibrary))
 
   /*objetsPossedes = [
     { nom: "gants_poison", set: "empoisonneur", weight: 5 },
@@ -291,7 +294,10 @@ function generateLootForUser2(user, itemsLibrary, rarityTable, itemOwned, count)
       //FONCTION DE FILTRAGE POUR ENLEVER LES OBJETS POSSEDES OU NON DEBLOQUES
 
       // Si l'objet déjà acheté → exclu
-      if (itemOwned[e.name]) {
+
+      //INCLUDES RENVOIE UN BOOLEEN, ALORS QUE FIND RENVOIE LE NOM DE L'OBJET
+      //SI ON AVAIT UTILISE UN FIND ALORS ÇA AURAIT RENVOYE QUELQUE CHOSE ET ÇA AURAIT ETE TRUE
+      if (itemOwned.includes(e.name)) {
         return false;
       }
       //Si l'objet est déjà tiré dans le tirage
@@ -365,6 +371,50 @@ function generateLootForUser2(user, itemsLibrary, rarityTable, itemOwned, count)
 
   return drops;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

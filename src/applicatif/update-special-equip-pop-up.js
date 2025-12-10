@@ -1,8 +1,8 @@
 //déclenché quand clic sur boutton d'un nouvel équipement 
 class UpdateSpecialEquipPopUp {
-    constructor(pidLoadSpecialEquipement, pidUpdateSpecialEquipPopUpOnHabitica) {
+    constructor(pidLoadSpecialEquipement, pidUpdateSpecialEquipPopUp) {
         this.pidLoadSpecialEquipement = pidLoadSpecialEquipement
-        this.pidUpdateSpecialEquipPopUpOnHabitica = pidUpdateSpecialEquipPopUpOnHabitica
+        this.pidUpdateSpecialEquipPopUp = pidUpdateSpecialEquipPopUp
         //vide pour le moment
     }
     handle() {
@@ -12,7 +12,7 @@ class UpdateSpecialEquipPopUp {
 
         //construire (push)
         //new HabiticaAPI().createNewPopup(popUp)
-        this.pidUpdateSpecialEquipPopUpOnHabitica(popUp)
+        this.pidUpdateSpecialEquipPopUp(popUp)
         //HabiticaAPI().createNewPopupifAlreadyExist(popUp)
 
     }

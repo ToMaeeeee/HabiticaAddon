@@ -29,11 +29,12 @@ function deleteTask(taskId) {
 
 
 //une fonction qui push les 4 items
-function publishNewShop(items) {
+function publishNewShopOnHabitica(items) {
     removeOldShop()
     items.forEach(k => {
         habiticaApi.createNewItemsShop(k)
     })
+    reorderShopHabitica()
 }
 
 

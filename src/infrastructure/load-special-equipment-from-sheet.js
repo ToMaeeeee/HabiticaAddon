@@ -9,6 +9,7 @@ function loadSpecialEquipmentFromSheet() {
     data.forEach(row => {
         if (row.every(cell => !cell)) return;
 
+
         const obj = {};
         headers.forEach((h, i) => obj[h] = row[i]);
         if (!obj.owned) return
@@ -29,7 +30,5 @@ function loadSpecialEquipmentFromSheet() {
             : itemsBySet.get(item.nomSet).push(item); //if non → 
     });
 
-    console.log({ itemsBySet })
-    Logger.log("Chargement des items spéciaux du Sheet réussi");
     return new SpecialEquipement(itemsBySet);
 }

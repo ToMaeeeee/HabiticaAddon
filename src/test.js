@@ -26,3 +26,34 @@ function foo2() {
     return
 }
 
+function foo3() {
+    const specialEquipement = loadSpecialEquipmentFromSheet()
+    specialEquipement.getBonus()
+}
+
+function foo4() {
+    const user = getHabiticaUser()
+    const SE = loadSpecialEquipmentFromSheet().getDiceBonus()
+
+    logMap(user.getDiceBonus(SE))
+}
+
+function foo5() {
+    const a = new UpdateDiceStatsPopUp(loadSpecialEquipmentFromSheet, getHabiticaUser, new HabiticaApi().createNewPopupifAlreadyExist)
+    a.handle()
+}
+
+function foo6() {
+    const app = mountApplication()
+    app.generateDailyShop.handle()
+}
+
+
+function foo7() {
+
+    loggerGgsheetGas({ connard: "salut" })
+}
+
+function foo8() {
+    reorderShopHabitica()
+}
