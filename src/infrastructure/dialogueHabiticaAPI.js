@@ -5,9 +5,22 @@
 
 class HabiticaAPI {
 
+
+  getHabiticaUser() {
+    const response = UrlFetchApp.fetch(`${config.HABITICA_BASE_URL}/user`, {
+      method: "get",
+      headers: config.HEADERS,
+      muteHttpExceptions: true
+    });
+
+    const habiticaUser = JSON.parse(response.getContentText()).data;
+
+    return habiticaUser
+  }
+
   createNewTaskForUser(task) { //Cest une méthode
     const habiticaTask = this.taskMapperMoivsHabitica(task)
-    var params = {
+    const params = {
       "method": "post",
       "headers": config.HEADERS,
       "contentType": "application/json",
@@ -15,7 +28,7 @@ class HabiticaAPI {
       "muteHttpExceptions": true,
     }
 
-    var url = config.HABITICA_BASE_URL + config.TASK_URL
+    const url = config.HABITICA_BASE_URL + config.TASK_URL
     UrlFetchApp.fetch(url, params)
   }
 
@@ -23,7 +36,7 @@ class HabiticaAPI {
 
   createNewPopupifAlreadyExist(popUp) {
     const habiticaPopUp = this.popUpMapperMoivsHabitica(popUp)
-    var params = {
+    const params = {
       "method": "post",
       "headers": config.HEADERS,
       "contentType": "application/json",
@@ -38,8 +51,8 @@ class HabiticaAPI {
     //detruire :
     if (previousPopUp) deleteTask(previousPopUp.id)
 
-
-    var url = config.HABITICA_BASE_URL + config.TASK_URL
+    //créer : 
+    const url = config.HABITICA_BASE_URL + config.TASK_URL
     UrlFetchApp.fetch(url, params)
   }
 
@@ -47,7 +60,7 @@ class HabiticaAPI {
 
   createNewPopup(popUp) {
     const habiticaPopUp = this.popUpMapperMoivsHabitica(popUp)
-    var params = {
+    const params = {
       "method": "post",
       "headers": config.HEADERS,
       "contentType": "application/json",
@@ -55,14 +68,14 @@ class HabiticaAPI {
       "muteHttpExceptions": true,
     }
 
-    var url = config.HABITICA_BASE_URL + config.TASK_URL
+    const url = config.HABITICA_BASE_URL + config.TASK_URL
     UrlFetchApp.fetch(url, params)
   }
 
 
   createNewItemsShop(item) {
     const habiticaReward = this.itemMapperMoivsHabiticaReward(item)
-    var params = {
+    const params = {
       "method": "post",
       "headers": config.HEADERS,
       "contentType": "application/json",
@@ -70,7 +83,7 @@ class HabiticaAPI {
       "muteHttpExceptions": true,
     }
 
-    var url = config.HABITICA_BASE_URL + config.TASK_URL
+    const url = config.HABITICA_BASE_URL + config.TASK_URL
     UrlFetchApp.fetch(url, params)
   }
 
@@ -108,6 +121,24 @@ class HabiticaAPI {
       notes: item.effect,
       value: item.price  // facultatif, Habitica l'utilise comme prix en pièces d'or si "price" n'est pas fourni
     }
+  }
+
+
+
+  validateTaskHabitica(taskID) {
+    UrlFetchApp.fetch(`https://habitica.com/api/v3/tasks/${taskID}/score/up`, {
+      method: "post",
+      headers: config.HEADERS,
+      muteHttpExceptions: true
+    })
+  }
+
+  unvalidateTaskHabitica(taskID) {
+    UrlFetchApp.fetch(`https://habitica.com/api/v3/tasks/${taskID}/score/down`, {
+      method: "post",
+      headers: config.HEADERS,
+      muteHttpExceptions: true
+    })
   }
 
 }

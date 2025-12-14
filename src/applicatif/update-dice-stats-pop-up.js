@@ -6,7 +6,7 @@ class UpdateDiceStatsPopUp {
         this.pidUpdateDiceStatsPopUp = pidUpdateDiceStatsPopUp
     }
     handle() {
-        const user = this.pidGetUser() //PID A FAIRE ENSUITE
+        const user = this.pidGetUser()
         const specialEquipement = this.pidloadSpecialEquipement()
 
         const specialEquipementDiceBonus = specialEquipement.getDiceBonus()

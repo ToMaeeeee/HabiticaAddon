@@ -1,12 +1,7 @@
 // === Fonction d'appel API pour avoir les infos des stats et niveau etc ===
-function getHabiticaUser() {
-    const response = UrlFetchApp.fetch(`${config.HABITICA_BASE_URL}/user`, {
-        method: "get",
-        headers: config.HEADERS,
-        muteHttpExceptions: true
-    });
+function getUserFromHabiticaUser() {
 
-    const habiticaUser = JSON.parse(response.getContentText()).data;
+    const habiticaUser = new HabiticaAPI().getHabiticaUser()
     const stats = getPlayerBaseStats(habiticaUser)
     const gears = getPlayerGears(habiticaUser)
     const buffs = habiticaUser.stats.buffs

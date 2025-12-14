@@ -142,28 +142,6 @@ function sendTestMessage(texte) {
 
 
 
-
-
-
-
-
-
-function testRarity() {
-  // 1️⃣ Récupérer les infos du joueur
-  const user = getHabiticaUser();
-  Logger.log(JSON.stringify(user.items.gear, null, 2))
-  Logger.log(JSON.stringify(user.stats.gear, null, 2))
-  const level = user.stats.lvl; // niveau actuel du joueur
-
-  // 2️⃣ Obtenir la table de probabilité la plus proche de ce niveau
-  const rarityChances = getRarityChances(level);
-
-  Logger.log("Niveau du joueur : " + level);
-  Logger.log("Probabilités de rareté : " + JSON.stringify(rarityChances));
-}
-
-// === Récupère la table la plus proche du niveau ===
-
 // TRANSFORMABLE EN REDUCE (pas facile cependant)
 function getRarityChances(level, rarityTable) {
   let closest = rarityTable[0][1];
