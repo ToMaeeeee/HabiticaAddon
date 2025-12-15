@@ -1,3 +1,4 @@
+//Ce qu'il fait : Route les webhooks vers la bonne action
 class BuyableDispatcher {
     constructor(app) {
         this.app = app

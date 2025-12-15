@@ -1,3 +1,5 @@
+//Ce qu'il fait : Contient la configuration des actions (dés, caractéristiques, seuils)
+
 const ACTION_DETAILS = {
     // Actions physiques
     caillou: {

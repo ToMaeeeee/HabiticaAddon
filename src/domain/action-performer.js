@@ -1,5 +1,5 @@
 class PerformAction {
-    constructor(user, specialEquipement, config, sendMessageLogs) {
+    constructor(user, specialEquipement, config, sendMessageLogs, isTest = false) { //On pourra envelver plus tard isTest, mais c'est parceq ue habtiica limite le nmobre de requetes
 
         //const user = getUserFromHabiticaUser(); on va donc faire du PID ici
         //const specialEquipement = loadSpecialEquipmentFromSheet();
@@ -7,6 +7,7 @@ class PerformAction {
         this.user = user;
         this.specialEquipement = specialEquipement;
         this.sendMessageLogs = sendMessageLogs;
+        this.isTest = isTest
     }
 
 
@@ -29,7 +30,7 @@ class PerformAction {
         if (totalRoll < config.successThreshold) {
             this.sendMessageLogs.push(`Échec du test de ${config.characteristic}`);
         } else {
-            const damage = rollDice(config.damageDice);
+            const damage = rollDice(config.types.damage.dice);
             dealDamageBossHabitica(damage);
             this.sendMessageLogs.push(`Succès ! Dégâts infligés : ${damage}`);
 
