@@ -27,7 +27,10 @@ function handleScoredEvent(data) {
 
 function handleScoredReward(data) {
     const app = mountApplication()
-    app.updateDiceStatsPopUp.handle()
+    // 🎯 Utilise le dispatcher pour router vers la bonne action
+    const dispatcher = new BuyableDispatcher(app)
+    dispatcher.dispatch(data)
+    app.updateDiceStatsPopUp.handle() //A REMETTRE +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 }
 
 function handleScoredToDo(data) {

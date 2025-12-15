@@ -25,13 +25,13 @@ class ActionCatalog {
 
     // Actions magiques
     flammeche() { this.executeDamageAction("flammeche") }
-    bouleDeFeu() { this.executeDamageAction("bouleDeFeu") }
-    explosionArcanique() { this.executeDamageAction("explosionArcanique") }
-    tempeteDeFlammes() { this.executeDamageAction("tempeteDeFlammes") }
+    bouledefeu() { this.executeDamageAction("bouledefeu") }
+    explosionacanique() { this.executeDamageAction("explosionarcanique") }
+    tempetedeflammes() { this.executeDamageAction("tempetedeflammes") }
 
 
     // Actions spéciales (à implémenter plus tard)
-    potionSoin({ data, app }) {
+    potionsoin({ data, app }) {
         // logique métier
     }
 

@@ -1,18 +1,62 @@
 //Ce qu'il fait : Route les webhooks vers la bonne action
+
+
+// 📋 MAPPING DES ACTIONS
+// Ce dictionnaire fait le lien entre l'alias de la tâche et l'action à exécuter
+const DAILY_BUYABLE_ACTIONS = {
+    'rocher': (params) => params.app.actionCatalog.rocher(),
+    'caillou': (params) => params.app.actionCatalog.caillou(),
+    'montagne': (params) => params.app.actionCatalog.montagne(),
+    'atlas': (params) => params.app.actionCatalog.atlas(),
+    'flammeche': (params) => params.app.actionCatalog.flammeche(),
+    'bouledefeu': (params) => params.app.actionCatalog.bouleDeFeu(),
+    'explosionarcanique': (params) => params.app.actionCatalog.explosionarcanique(),
+    'tempetedeflammes': (params) => params.app.actionCatalog.tempetedeflammes(),
+    'potionsoin': (params) => params.app.actionCatalog.potionsoin(params),
+    'trefle': (params) => params.app.actionCatalog.trefle(params)
+};
+
+
+
 class BuyableDispatcher {
-    constructor(app) {
+    constructor(app, isTest = false) { //version pour test
         this.app = app
+        this.isTest = isTest
     }
 
 
     dispatch(data) {
         const alias = data?.task?.alias
-        if (!alias) return
-
-        const action = DAILY_BUYABLE_ACTIONS[alias]
-        if (action) {
-            action({ data, app: this.app })
+        if (!alias) {
+            console.log("⚠️ Aucun alias trouvé dans les données")
+            return
         }
+
+        // Reçoit un alias qui commence par "item" → déclenche une action
+        if (alias.startsWith("item-")) {
+
+            //----------------------PARTIE DE TEST A ENLEVER ENSUITE-----------------------------------------
+            /*
+            const key = alias.replace("item-", "");
+            if (this.isTest) {
+                loggerGgsheetGas(JSON.stringify(data));
+                if (DAILY_BUYABLE_ACTIONS[key]) {
+                    loggerGgsheetGas(`✅ [TEST] Action reconnue : "${key}"`);
+                } else {
+                    loggerGgsheetGas(`❌ [TEST] Action inconnue : "${key}"`);
+                }
+                return;
+            }
+                */
+            //--------------------------------------------------------------------------------------------------------------------
+
+            const actionName = alias.replace("item-", "");
+            const action = DAILY_BUYABLE_ACTIONS[actionName]
+            if (action) {
+                action({ data, app: this.app })
+            }
+        }
+
     }
 
 }

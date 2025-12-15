@@ -17,11 +17,3 @@ function foo1() {
     // log le résultat
     console.log(totalDiceBonus)   // ou loggerLog(totalDiceBonus) si tu veux utiliser ton logger
 }
-
-
-
-
-
-function testActionRocher() {
-    actionRocher();
-}

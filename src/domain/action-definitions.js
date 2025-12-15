@@ -32,7 +32,7 @@ const ACTION_DETAILS = {
         characteristic: "INT",
         successThreshold: 2
     },
-    bouleDeFeu: {
+    bouledefeu: {
         types: {
             damage: { dice: 10 },
             consume: { resource: "mana", amount: 15 }
@@ -40,7 +40,7 @@ const ACTION_DETAILS = {
         characteristic: "INT",
         successThreshold: 4
     },
-    explosionArcanique: {
+    explosionarcanique: {
         types: {
             damage: { dice: 20 },
             consume: { resource: "mana", amount: 25 }
@@ -48,7 +48,7 @@ const ACTION_DETAILS = {
         characteristic: "INT",
         successThreshold: 8
     },
-    tempeteDeFlammes: {
+    tempetedeflammes: {
         types: {
             damage: { dice: 100 },
             consume: { resource: "mana", amount: 45 }
@@ -58,7 +58,7 @@ const ACTION_DETAILS = {
     },
 
     // Potions / soins
-    potionSoin: {
+    potionsoin: {
         types: { heal: { resource: "HP", amount: 15 } },
         characteristic: "CST",
         successThreshold: 10

@@ -16,7 +16,7 @@ class PerformAction {
         if (!config) throw new Error(`Action inconnue: ${actionName}`);
 
 
-        const sendMessageLogs = [];
+        //const sendMessageLogs = [];
 
         const userDiceStats = new UserDiceStats(
             () => this.user,
@@ -47,16 +47,21 @@ class PerformAction {
         const amount = config.types.heal.amount;
         const resource = config.types.heal.resource;
         //EFFECTUER SOINS //healResource(resource, amount);
-        logs.push(`Récupération de ${amount} ${resource}`);
+        sendMessageLogs.push(`Récupération de ${amount} ${resource}`);
     }
 
     Consume() {
 
-        const config = this.config; {
-            for (const [resource, amount] of Object.entries(config.types.consume)) {
-                //EFFECTUER CONSOMMATION // consumeResource(resource, amount);
-                logs.push(`Consommation de ${amount} ${resource}`);
-            }
+        const config = this.config;
+
+        for (const [resource, amount] of Object.entries(config.types.consume)) {
+            //EFFECTUER CONSOMMATION // consumeResource(resource, amount);
+            sendMessageLogs.push(`Consommation de ${amount} ${resource}`);
         }
+    }
+
+
+    Open() {
+
     }
 }
