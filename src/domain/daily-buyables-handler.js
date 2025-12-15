@@ -1,22 +1,23 @@
-function actionRocher({ data, app }) {
-    // logique métier
-    const user = getUserFromHabiticaUser()
+//function actionRocher({ data, app }) {
+function actionRocher() {
+    const sendMessageLogs = [];
+    const user = getUserFromHabiticaUser();
+    const specialEquipement = loadSpecialEquipmentFromSheet();
 
-    //Dans le futur : fonction rollDice(caractéristique, requirement, avantage)
-    //DD (STR) > 4, Un dé 10 de dégats
-    //Il faut récupérer la valeur de la force. 
-    //
+    const action = new PerformAction(ACTION_DETAILS["rocher"], user, specialEquipement, sendMessageLogs);
+    action.Damage(); // rocher est seulement un damage
 }
+
 
 
 
 
 function actionCaillou({ data, app }) {
-    // logique métier
+    performDamageAction("caillou");
 }
 
 function actionMontagne({ data, app }) {
-    // logique métier
+    performDamageAction("montagne");
 }
 
 
@@ -31,15 +32,3 @@ function actionTrefle({ data, app }) {
 
 
 
-function actionRocher({ data, app }) {
-    const damage = rollDice()
-    dealDamageBossHabitica(damage)
-
-    app.updateSpecialEquipPopUp.handle()
-}
-
-const DAILY_BUYABLES_ACTIONS = {
-    rocher: actionRocher,
-    soin: actionPotionSoin,
-    degats: actionDegats
-}
