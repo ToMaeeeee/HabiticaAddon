@@ -17,3 +17,12 @@ function foo1() {
     // log le résultat
     console.log(totalDiceBonus)   // ou loggerLog(totalDiceBonus) si tu veux utiliser ton logger
 }
+
+
+
+//--------------------------------------------------------------------------------------------------------------------
+//Penser à enlever les logs sur :
+// get-habitica-user.js
+// action-performer.js
+// dialogue habiica api .js
+// webhook entry . js

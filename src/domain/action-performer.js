@@ -8,6 +8,9 @@ class PerformAction {
         this.specialEquipement = specialEquipement;
         this.sendMessageLogs = sendMessageLogs;
         this.isTest = isTest
+
+        // 🔍 LOG 1 : Vérifier que sendMessageLogs est bien passé
+        loggerGgsheetGas("📋 sendMessageLogs reçu:", this.sendMessageLogs);
     }
 
 
@@ -25,7 +28,11 @@ class PerformAction {
 
         const characteristicBonus = userDiceStats.get(config.characteristic);
         const totalRoll = rollDice(20) + characteristicBonus;
+
         this.sendMessageLogs.push(`Roll total: ${totalRoll} (${config.characteristic} bonus: ${characteristicBonus})`);
+
+        // 🔍 LOG 2 : Vérifier qu'on ajoute bien des messages
+        loggerGgsheetGas("📝 Message ajouté, tableau contient:", this.sendMessageLogs);
 
         if (totalRoll < config.successThreshold) {
             this.sendMessageLogs.push(`Échec du test de ${config.characteristic}`);
@@ -36,7 +43,15 @@ class PerformAction {
 
         }
 
+
+        // 🔍 LOG 3 : Vérifier le contenu final avant l'envoi
+        loggerGgsheetGas("📤 Avant sendMessage, logs:", this.sendMessageLogs);
+        loggerGgsheetGas("📤 Message à envoyer:", this.sendMessageLogs.join("\n"));
+
         sendMessage(this.sendMessageLogs.join("\n"));
+
+        // 🔍 LOG 4 : Confirmer que sendMessage a été appelé
+        loggerGgsheetGas("✅ sendMessage() a été appelé");
     }
 
 

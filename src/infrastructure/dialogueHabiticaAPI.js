@@ -1,7 +1,150 @@
 //CECI EST MIS DANS L'INFRA PARCE QUE L'INFRA, c'est ce qui deal avec l'EXTERIEUR
 //====================================================================
-//====================================================================
-//====================================================================
+
+
+class HabiticaAPI {
+
+  getHabiticaUser() {
+    // 🔍 LOG 1 : On tente l'appel API
+    loggerGgsheetGas("🌐 Appel API Habitica /user...");
+
+    try {
+      const response = UrlFetchApp.fetch(`${config.HABITICA_BASE_URL}/user`, {
+        method: "get",
+        headers: config.HEADERS,
+        muteHttpExceptions: true
+      });
+
+      const responseText = response.getContentText();
+
+      // 🔍 LOG 2 : Vérifier la réponse brute
+      loggerGgsheetGas("📡 Réponse reçue (début): " + responseText.substring(0, 100));
+
+      const habiticaUser = JSON.parse(responseText).data;
+
+      // 🔍 LOG 3 : Vérifier le parsing
+      loggerGgsheetGas("✅ Parsing OK, data: " + (habiticaUser ? "OK" : "UNDEFINED"));
+
+      return habiticaUser;
+
+    } catch (error) {
+      // 🔍 LOG 4 : Capturer les erreurs
+      loggerGgsheetGas("❌ ERREUR dans getHabiticaUser: " + error.toString());
+      throw error;
+    }
+  }
+
+  createNewTaskForUser(task) {
+    const habiticaTask = this.taskMapperMoivsHabitica(task)
+    const params = {
+      "method": "post",
+      "headers": config.HEADERS,
+      "contentType": "application/json",
+      "payload": JSON.stringify(habiticaTask),
+      "muteHttpExceptions": true,
+    }
+
+    const url = config.HABITICA_BASE_URL + config.TASK_URL
+    UrlFetchApp.fetch(url, params)
+  }
+
+  createNewPopupifAlreadyExist(popUp) {
+    const habiticaPopUp = this.popUpMapperMoivsHabitica(popUp)
+    const params = {
+      "method": "post",
+      "headers": config.HEADERS,
+      "contentType": "application/json",
+      "payload": JSON.stringify(habiticaPopUp),
+      "muteHttpExceptions": true,
+    }
+
+    const rewards = getAllRewards()
+    const previousPopUp = rewards.find(t => t.alias === popUp.id)
+
+    if (previousPopUp) deleteTask(previousPopUp.id)
+
+    const url = config.HABITICA_BASE_URL + config.TASK_URL
+    UrlFetchApp.fetch(url, params)
+  }
+
+  createNewPopup(popUp) {
+    const habiticaPopUp = this.popUpMapperMoivsHabitica(popUp)
+    const params = {
+      "method": "post",
+      "headers": config.HEADERS,
+      "contentType": "application/json",
+      "payload": JSON.stringify(habiticaPopUp),
+      "muteHttpExceptions": true,
+    }
+
+    const url = config.HABITICA_BASE_URL + config.TASK_URL
+    UrlFetchApp.fetch(url, params)
+  }
+
+  createNewItemsShop(item) {
+    const habiticaReward = this.itemMapperMoivsHabiticaReward(item)
+    const params = {
+      "method": "post",
+      "headers": config.HEADERS,
+      "contentType": "application/json",
+      "payload": JSON.stringify(habiticaReward),
+      "muteHttpExceptions": true,
+    }
+
+    const url = config.HABITICA_BASE_URL + config.TASK_URL
+    UrlFetchApp.fetch(url, params)
+  }
+
+  taskMapperMoivsHabitica(task) {
+    return {
+      alias: task.id,
+      type: "habit",
+      text: task.title,
+      notes: task.subtitle,
+      priority: 1,
+    }
+  }
+
+  popUpMapperMoivsHabitica(popUp) {
+    return {
+      alias: popUp.id,
+      type: "reward",
+      text: popUp.title,
+      notes: popUp.description,
+      value: 0
+    }
+  }
+
+  itemMapperMoivsHabiticaReward(item) {
+    return {
+      alias: item.alias,
+      type: "reward",
+      text: "**" + item.name + " (" + item.rarity + ")" + "**",
+      notes: item.effect,
+      value: item.price
+    }
+  }
+
+  validateTaskHabitica(taskID) {
+    UrlFetchApp.fetch(`https://habitica.com/api/v3/tasks/${taskID}/score/up`, {
+      method: "post",
+      headers: config.HEADERS,
+      muteHttpExceptions: true
+    })
+  }
+
+  unvalidateTaskHabitica(taskID) {
+    UrlFetchApp.fetch(`https://habitica.com/api/v3/tasks/${taskID}/score/down`, {
+      method: "post",
+      headers: config.HEADERS,
+      muteHttpExceptions: true
+    })
+  }
+}
+
+
+
+/*
 
 class HabiticaAPI {
 
@@ -142,3 +285,5 @@ class HabiticaAPI {
   }
 
 }
+
+*/
