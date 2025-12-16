@@ -1,3 +1,4 @@
+/*
 function dealDamageBossHabitica(damage) {
     const API = new HabiticaAPI()
     //récupérer les pending damage. 
@@ -20,6 +21,7 @@ function dealDamageBossHabitica(damage) {
     //detruire la task
     deleteTask(damageTaskID)
 }
+*/
 
 
 
@@ -46,34 +48,4 @@ function createTempDamageTask() {
 
 }
 
-
-
-function getPendingDamage() {
-    const habiticaUser = new HabiticaAPI().getHabiticaUser()
-    const pendingDamage = habiticaUser?.party?.quest?.progress?.up
-    return pendingDamage
-    //201.456468$ ou undefined s'il n'y a pas de boss
-}
-
-function getLifeStats() {
-    const userBeforeDamage = new HabiticaAPI().getHabiticaUser()
-    // UTILISER LA NOTATION PAR POINTS comme Mike the Monk
-    const lifeStats = {
-        "stats.hp": userBeforeDamage.stats.hp,
-        "stats.mp": userBeforeDamage.stats.mp,
-        "stats.exp": userBeforeDamage.stats.exp,
-        "stats.gp": userBeforeDamage.stats.gp
-    };
-    return lifeStats
-}
-
-function restorePreviousLifeStats(previousLifeStats) {
-    UrlFetchApp.fetch(`${config.HABITICA_BASE_URL}/user`, {
-        method: "put",
-        headers: config.HEADERS,
-        contentType: "application/json",
-        payload: JSON.stringify(previousLifeStats),
-        muteHttpExceptions: false
-    });
-}
 

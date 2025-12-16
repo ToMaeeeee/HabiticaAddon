@@ -1,4 +1,54 @@
+//version de claude du 17/12
 function doPost(event) {
+    loggerGgsheetGas("🎯 === WEBHOOK REÇU ===");
+
+    try {
+        const data = JSON.parse(event.postData.contents);
+        loggerGgsheetGas(`📦 Type: ${data.type} | Task: ${data.task?.alias || 'N/A'}`);
+
+        // ⚡ RÉPONSE IMMÉDIATE à Habitica (< 1 seconde)
+        const response = HtmlService.createHtmlOutput("OK");
+
+        // 🔄 Traitement APRÈS avoir répondu
+        if (data.type === "scored") {
+            // Lance le traitement en arrière-plan
+            processWebhookAsync(data);
+        }
+
+        loggerGgsheetGas("✅ Réponse envoyée à Habitica");
+        return response;
+
+    } catch (e) {
+        loggerGgsheetGas("❌ ERREUR parsing webhook: " + e.toString());
+        // Même en cas d'erreur, on répond pour éviter les retries
+        return HtmlService.createHtmlOutput("ERROR");
+    }
+}
+
+
+// 🔄 Traitement asynchrone (après avoir répondu)
+function processWebhookAsync(data) {
+    try {
+        loggerGgsheetGas("🔄 Début traitement asynchrone");
+
+        if (data.task.type === "reward") {
+            handleScoredReward(data);
+        }
+        if (data.task.type === "todo") {
+            handleScoredToDo(data);
+        }
+
+        loggerGgsheetGas("✅ Traitement asynchrone terminé");
+
+    } catch (e) {
+        loggerGgsheetGas("❌ ERREUR traitement async: " + e.toString());
+        loggerGgsheetGas("📋 Stack: " + e.stack);
+    }
+}
+
+
+//ma version antérieure (qui fonctionnait bien jusqu'à ce qu'on fasse les multiples appels sur caillou)
+/* function doPost(event) {
     loggerGgsheetGas("🎯 === WEBHOOK REÇU ===");
 
     try {
@@ -19,6 +69,8 @@ function doPost(event) {
         return HtmlService.createHtmlOutput();
     }
 }
+
+*/
 
 function handleScoredEvent(data) {
     loggerGgsheetGas("🎮 handleScoredEvent appelée");

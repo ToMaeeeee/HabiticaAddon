@@ -5,8 +5,6 @@
 class HabiticaAPI {
 
   getHabiticaUser() {
-    // 🔍 LOG 1 : On tente l'appel API
-    loggerGgsheetGas("🌐 Appel API Habitica /user...");
 
     try {
       const response = UrlFetchApp.fetch(`${config.HABITICA_BASE_URL}/user`, {
@@ -14,26 +12,14 @@ class HabiticaAPI {
         headers: config.HEADERS,
         muteHttpExceptions: true
       });
-
       const responseText = response.getContentText();
-
-      // 🔍 LOG 2 : Vérifier la réponse brute
-      loggerGgsheetGas("📡 Réponse reçue (début): " + responseText.substring(0, 100));
-
       const habiticaUser = JSON.parse(responseText).data;
-
-      // 🔍 LOG 3 : Vérifier le parsing
-      loggerGgsheetGas("✅ Parsing OK, data: " + (habiticaUser ? "OK" : "UNDEFINED"));
-
       return habiticaUser;
-
     } catch (error) {
-      // 🔍 LOG 4 : Capturer les erreurs
       loggerGgsheetGas("❌ ERREUR dans getHabiticaUser: " + error.toString());
       throw error;
     }
   }
-
   createNewTaskForUser(task) {
     const habiticaTask = this.taskMapperMoivsHabitica(task)
     const params = {

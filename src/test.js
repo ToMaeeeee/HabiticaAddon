@@ -18,6 +18,10 @@ function foo1() {
     console.log(totalDiceBonus)   // ou loggerLog(totalDiceBonus) si tu veux utiliser ton logger
 }
 
+function foo2() {
+    dealEstimatedDamage(5)
+}
+
 
 
 // === TEST : Créer une Daily simple ===

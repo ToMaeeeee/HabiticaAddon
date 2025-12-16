@@ -1,38 +1,53 @@
-// 🎯 OPTIMISATION : Au lieu d'une boucle, on calcule combien de hits sont nécessaires
-// Chaque validation de task inflige environ 1.5 dégâts en moyenne (dépend du boss)
-// Pour être sûr, on fait damage × 1 validations
-
-
-
-//Celle aau-dessus ça devra avoir un PID et aller dans la domaien
-
-
-
 
 function dealEstimatedDamage(damageTarget) {
-    const API = new HabiticaAPI()
-    const strength = getUserFromHabiticaUser().getStats().str
-    const clicksNeeded = estimateDamageDailyClicks(damageTarget, strength)
-    const damageTaskID = API.createNewDaily()
-    for (let i = 0; i < clicksNeeded; i++) {
-        API.validateTaskHabitica(damageTaskID)
-        API.unvalidateTaskHabitica(damageTaskID)
-        Utilities.sleep(600); // 600ms entre chaque hit
+
+    try {
+        const API = new HabiticaAPI()
+        //const habiticaUser = API.getHabiticaUser()
+        //const pendingDamageInitial = getPendingDamage(habiticaUser);
+        //if (pendingDamageInitial === undefined) return;
+        const strength = getUserFromHabiticaUser().getStats().str
+        const clicksNeeded = estimateDamageClicks(damageTarget, strength)
+        loggerGgsheetGas(`⚔️ ${clicksNeeded} clics nécessaires pour ${damageTarget} dégâts`);
+
+        const tempDaily = new Daily("temp-damage", "Dégâts temporaires", "Daily technique pour infliger des dégâts", 0.1)
+        const damageTask = API.createNewDaily(tempDaily)
+        const damageTaskID = API.createNewDaily(damageTask).id
+
+        for (let i = 0; i < clicksNeeded; i++) {
+            API.validateTaskHabitica(damageTaskID)
+            API.unvalidateTaskHabitica(damageTaskID)
+            Utilities.sleep(600); // 600ms entre chaque hit
+        }
+        deleteTask(damageTaskID);
+
+        // 7. Vérifier les dégâts réellement infligés
+        //const pendingDamageFinal = getPendingDamage();
+        //const actualDamage = pendingDamageFinal - pendingDamageInitial;
+        //loggerGgsheetGas(`✅ Dégâts infligés: ${actualDamage} (cible: ${damageTarget})`);
     }
-
-    //a faire avec une daily en clic et DECLIC par contre
-
+    catch (error) {
+        loggerGgsheetGas(`❌ ERREUR dans dealEstimatedDamage: ${error.toString()}`);
+        throw error;
+    }
 
 }
 
-
 function estimateDamageClicks(damageTarget, strength) {
-    const API = new HabiticaAPI()
-    //récupérer la force
-    //const strength = getUserFromHabiticaUser().getStats().str
     const damagePerClick = 1 + strength * 0.005;
     let clicksNeeded = Math.ceil(damageTarget / damagePerClick);
     return clicksNeeded;
+}
+
+function getPendingDamage(habiticaUser) {
+    // Si on a déjà les données, on les utilise
+    if (habiticaUser) {
+        return habiticaUser?.party?.quest?.progress?.up;
+    }
+
+    // Sinon, on fait l'appel API (rétrocompatibilité)
+    const userData = new HabiticaAPI().getHabiticaUser();
+    return userData?.party?.quest?.progress?.up;
 }
 
 

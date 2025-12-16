@@ -30,7 +30,7 @@ class PerformAction {
             loggerGgsheetGas("❌ Échec ajouté");
         } else {
             const damage = rollDice(config.types.damage.dice);
-            dealDamageBossHabitica(damage);
+            dealEstimatedDamage(damage);
             this.sendMessageLogs.push(`Succès ! Dégâts infligés : ${damage}`);
             loggerGgsheetGas("✅ Succès ajouté, damage: " + damage);
         }
