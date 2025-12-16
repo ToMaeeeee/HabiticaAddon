@@ -1,4 +1,4 @@
-function getUserFromHabiticaUser() { // A ENLEVER UNE FOIS DEBUGGE
+function getUserFromHabiticaUser() { // A REMPLACER PAR CELLE EN DESSOUS UNE DEBUGGE
     // 🔍 LOG 1 : On commence
     loggerGgsheetGas("🎬 getUserFromHabiticaUser() appelée");
 

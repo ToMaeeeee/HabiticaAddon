@@ -95,6 +95,21 @@ class HabiticaAPI {
     UrlFetchApp.fetch(url, params)
   }
 
+  createNewDaily(daily) {
+    const habiticaDaily = this.dailyMapperMoivsHabitica(daily)
+    const params = {
+      "method": "post",
+      "headers": config.HEADERS,
+      "contentType": "application/json",
+      "payload": JSON.stringify(habiticaDaily),
+      "muteHttpExceptions": true,
+    }
+    const url = config.HABITICA_BASE_URL + config.TASK_URL
+    const response = UrlFetchApp.fetch(url, params)
+    return JSON.parse(response.getContentText()).data
+  }
+
+
   taskMapperMoivsHabitica(task) {
     return {
       alias: task.id,
@@ -124,6 +139,19 @@ class HabiticaAPI {
       value: item.price
     }
   }
+
+
+  dailyMapperMoivsHabitica(daily) {
+    return {
+      alias: daily.id,
+      type: "daily",
+      text: daily.title,
+      notes: daily.subtitle || "",
+      priority: daily.difficulty || 0.1,
+    }
+  }
+
+
 
   validateTaskHabitica(taskID) {
     UrlFetchApp.fetch(`https://habitica.com/api/v3/tasks/${taskID}/score/up`, {
