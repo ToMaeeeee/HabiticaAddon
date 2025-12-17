@@ -12,7 +12,7 @@ function dealEstimatedDamage(damageTarget) {
 
         const tempDaily = new Daily("temp-damage", "Dégâts temporaires", "Daily technique pour infliger des dégâts", 0.1)
         const damageTask = API.createNewDaily(tempDaily)
-        const damageTaskID = API.createNewDaily(damageTask).id
+        const damageTaskID = damageTask.id
 
         for (let i = 0; i < clicksNeeded; i++) {
             API.validateTaskHabitica(damageTaskID)
