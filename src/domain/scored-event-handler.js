@@ -65,7 +65,9 @@ class ScoredEventHandler {
     handleDaily() {
         // ATTTENTION : PENSER AU CAS OU CE SONT DES CLICS SUR LA DAILY DE DEGATS !!!
         //IL FAUDRA LES IGNORER !!!!
+        if (this.task.alias === "temp-damage") loggerGgsheetGas("clic sur Temp damage");
     }
+
 
 
     isDuplicate() {
