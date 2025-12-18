@@ -15,11 +15,3 @@ function updateDiceBonusPopUpOnHabitica(popUp) {
     }
 }
 
-
-
-/*
-function updateDiceBonusPopUpOnHabitica(popUp) {
-    new HabiticaAPI().createNewPopupifAlreadyExist(popUp)
-    reorderShopHabitica()
-}
-    */
