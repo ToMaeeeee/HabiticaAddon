@@ -27,7 +27,7 @@ const ACTION_DETAILS = {
     flammeche: {
         types: {
             damage: { dice: 6 },
-            consume: { resource: "mana", amount: 10 }
+            stats: { mp: -10 }
         },
         characteristic: "INT",
         successThreshold: 2
@@ -35,7 +35,7 @@ const ACTION_DETAILS = {
     bouledefeu: {
         types: {
             damage: { dice: 10 },
-            consume: { resource: "mana", amount: 15 }
+            stats: { mp: -15 }
         },
         characteristic: "INT",
         successThreshold: 4
@@ -43,7 +43,7 @@ const ACTION_DETAILS = {
     explosionarcanique: {
         types: {
             damage: { dice: 20 },
-            consume: { resource: "mana", amount: 25 }
+            stats: { mp: -25 }
         },
         characteristic: "INT",
         successThreshold: 8
@@ -51,7 +51,7 @@ const ACTION_DETAILS = {
     tempetedeflammes: {
         types: {
             damage: { dice: 100 },
-            consume: { resource: "mana", amount: 45 }
+            stats: { mp: -45 }
         },
         characteristic: "INT",
         successThreshold: 12
@@ -59,8 +59,62 @@ const ACTION_DETAILS = {
 
     // Potions / soins
     potionsoin: {
-        types: { heal: { resource: "HP", amount: 15 } },
+        types: { stats: { hp: 15 } },
         characteristic: "CST",
-        successThreshold: 10
+        successThreshold: 10 //Test requis potion de soin
+    },
+
+    xppotion: {
+        types: { stats: { exp: 150 } },
+        characteristic: "CST", //je ne sais pas si on peut laisser vide
+        successThreshold: 0 // Pas de test requis pour une potion de XP
+    },
+
+    potionmana: {
+        types: {
+            stats: { mp: 30 }
+        },
+        characteristic: "CST",
+        successThreshold: 0
+    },
+
+    coffrec: {
+        types: {
+            openable
+        },
+        characteristic: "PER",
+        successThreshold: 8
+    },
+
+    coffreb: {
+        types: {
+            openable
+        },
+        characteristic: "PER",
+        successThreshold: 12
+    },
+
+    coffrea: {
+        types: {
+            openable
+        },
+        characteristic: "PER",
+        successThreshold: 16
+    },
+
+    coffres: {
+        types: {
+            openable
+        },
+        characteristic: "PER",
+        successThreshold: 20
+    },
+
+    coffress: {
+        types: {
+            openable
+        },
+        characteristic: "PER",
+        successThreshold: 24
     }
 };

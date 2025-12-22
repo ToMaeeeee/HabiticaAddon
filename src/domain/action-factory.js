@@ -13,8 +13,19 @@ class ActionCatalog {
         const specialEquipement = this.pidLoadSpecialEquipement()   // ✅ Une seule fois
         const sendMessageLogs = [];
 
-        new PerformAction(user, specialEquipement, ACTION_DETAILS[actionName], sendMessageLogs).Damage()
+        new PerformAction(user, specialEquipement, ACTION_DETAILS[actionName], sendMessageLogs).damage()
     }
+
+    executeModifyStats(actionName) {
+        new PerformAction(this.pidGetUser(), this.pidLoadSpecialEquipement(), ACTION_DETAILS[actionName]).modifyStats()
+    }
+
+    executeOpenAction(actionName) {
+        new PerformAction(this.pidGetUser(), this.pidLoadSpecialEquipement(), ACTION_DETAILS[actionName]).Open()
+    }
+
+
+
 
     // Actions physiques
     rocher() { this.executeDamageAction("rocher") }
@@ -30,16 +41,25 @@ class ActionCatalog {
     tempetedeflammes() { this.executeDamageAction("tempetedeflammes") }
 
 
-    // Actions spéciales (à implémenter plus tard)
-    potionsoin({ data, app }) {
-        // logique métier
-    }
+    // ========================================
+    // POTIONS / SOINS
+    // ========================================
+    potiondesoin() { this.executeModifyStats("potiondesoin") }
+    xppotion() { this.executeModifyStats("xppotion") }
 
     trefle({ data, app }) {
         // logique métier
         //ICI ON A BESOIN DE APP
     }
 
+    // ========================================
+    // COFFRES
+    // ========================================
+    coffrec() { this.executeOpenAction("coffrec") }
+    coffreb() { this.executeOpenAction("coffreb") }
+    coffrea() { this.executeOpenAction("coffrea") }
+    coffres() { this.executeOpenAction("coffres") }
+    coffress() { this.executeOpenAction("coffress") }
 
 
 }

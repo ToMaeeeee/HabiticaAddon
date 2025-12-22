@@ -9,11 +9,18 @@ const DAILY_BUYABLE_ACTIONS = {
     'montagne': (params) => params.app.actionCatalog.montagne(),
     'atlas': (params) => params.app.actionCatalog.atlas(),
     'flammeche': (params) => params.app.actionCatalog.flammeche(),
-    'bouledefeu': (params) => params.app.actionCatalog.bouleDeFeu(),
+    'bouledefeu': (params) => params.app.actionCatalog.bouledefeu(),
     'explosionarcanique': (params) => params.app.actionCatalog.explosionarcanique(),
     'tempetedeflammes': (params) => params.app.actionCatalog.tempetedeflammes(),
     'potionsoin': (params) => params.app.actionCatalog.potionsoin(params),
-    'trefle': (params) => params.app.actionCatalog.trefle(params)
+    'trefle': (params) => params.app.actionCatalog.trefle(params),
+    'xppotion': (params) => params.app.actionCatalog.xppotion(params),
+    'coffrec': (params) => params.app.actionCatalog.coffrec(params),
+    'coffreb': (params) => params.app.actionCatalog.coffreb(params),
+    'coffrea': (params) => params.app.actionCatalog.coffrea(params),
+    'coffres': (params) => params.app.actionCatalog.coffres(params),
+    'coffress': (params) => params.app.actionCatalog.coffress(params)
+
 };
 
 

@@ -3,9 +3,6 @@ function dealEstimatedDamage(damageTarget) {
 
     try {
         const API = new HabiticaAPI()
-        //const habiticaUser = API.getHabiticaUser()
-        //const pendingDamageInitial = getPendingDamage(habiticaUser);
-        //if (pendingDamageInitial === undefined) return;
         const strength = getUserFromHabiticaUser().getStats().str
         const clicksNeeded = estimateDamageClicks(damageTarget, strength)
         loggerGgsheetGas(`⚔️ ${clicksNeeded} clics nécessaires pour ${damageTarget} dégâts`);
@@ -17,11 +14,11 @@ function dealEstimatedDamage(damageTarget) {
         for (let i = 0; i < clicksNeeded; i++) {
             API.validateTaskHabitica(damageTaskID)
             API.unvalidateTaskHabitica(damageTaskID)
-            Utilities.sleep(600); // 600ms entre chaque hit
+            Utilities.sleep(50); // 50ms entre chaque hit → Avant c'était 600ms
         }
         deleteTask(damageTaskID);
 
-        // 7. Vérifier les dégâts réellement infligés
+        // Si Si nécessaire : Vérifier les dégâts réellement infligés
         //const pendingDamageFinal = getPendingDamage();
         //const actualDamage = pendingDamageFinal - pendingDamageInitial;
         //loggerGgsheetGas(`✅ Dégâts infligés: ${actualDamage} (cible: ${damageTarget})`);
