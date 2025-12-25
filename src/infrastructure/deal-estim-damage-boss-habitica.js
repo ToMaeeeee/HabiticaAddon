@@ -1,6 +1,6 @@
 
 function dealEstimatedDamage(damageTarget) {
-
+    loggerGgsheetGas("⚔️ DEBUT dealEstimatedDamage");
     try {
         const API = new HabiticaAPI()
         const strength = getUserFromHabiticaUser().getStats().str
@@ -10,13 +10,20 @@ function dealEstimatedDamage(damageTarget) {
         const tempDaily = new Daily("temp-damage", "Dégâts temporaires", "Daily technique pour infliger des dégâts", 0.1)
         const damageTask = API.createNewDaily(tempDaily)
         const damageTaskID = damageTask.id
+        //atteindre que la tâche soit bien créee
+        Utilities.sleep(800);
 
         for (let i = 0; i < clicksNeeded; i++) {
             API.validateTaskHabitica(damageTaskID)
             API.unvalidateTaskHabitica(damageTaskID)
-            Utilities.sleep(50); // 50ms entre chaque hit → Avant c'était 600ms
+            Utilities.sleep(600); // 600ms entre chaque hit → Avant c'était 600ms, on est passés à 50ms, mais claude me l'a remis à 600ms
         }
+
+        loggerGgsheetGas("✅ Tous les clics effectués");
+        Utilities.sleep(800);
+
         deleteTask(damageTaskID);
+        loggerGgsheetGas("🗑️ Daily temporaire supprimée");
 
         // Si Si nécessaire : Vérifier les dégâts réellement infligés
         //const pendingDamageFinal = getPendingDamage();
@@ -27,6 +34,8 @@ function dealEstimatedDamage(damageTarget) {
         loggerGgsheetGas(`❌ ERREUR dans dealEstimatedDamage: ${error.toString()}`);
         throw error;
     }
+
+    loggerGgsheetGas("⚔️ FIN dealEstimatedDamage");
 
 }
 

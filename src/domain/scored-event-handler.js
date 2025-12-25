@@ -4,14 +4,20 @@ class ScoredEventHandler {
     constructor(data) {
         this.data = data;
         this.task = data.task;
-        this.app = mountApplication();
-        loggerGgsheetGas("📱 Application montée");
+        this.app = null //on monte l'app seulement après avoir vérifié que ce n'est pas un clic sur la daily de degats
     }
 
 
     handle() {
-        loggerGgsheetGas("🎮 ScoredEventHandler.handle");
-        if (this.isDuplicate()) return;
+        loggerGgsheetGas(`🎮 ScoredEventHandler.handle - Type: ${this.task.type}, Alias: ${this.task.alias || 'N/A'}`);
+
+        if (this.shouldIgnoreTask()) return;
+        // ÉTAPE 2 : Monter l'app seulement maintenant
+        this.app = mountApplication();
+        loggerGgsheetGas("📱 Application montée");
+
+
+        // if (this.isDuplicate()) return;
         switch (this.task.type) {
             case "reward":
                 this.handleReward();
@@ -63,29 +69,47 @@ class ScoredEventHandler {
     }
 
     handleDaily() {
-        // ATTTENTION : PENSER AU CAS OU CE SONT DES CLICS SUR LA DAILY DE DEGATS !!!
-        //IL FAUDRA LES IGNORER !!!!
-        if (this.task.alias === "temp-damage") loggerGgsheetGas("clic sur Temp damage");
+        //Les clics sur la temp de dégats sont gérés par shouldIgnoreTask()
+
     }
 
-
-
-    isDuplicate() {
-        const cache = CacheService.getScriptCache();
-
-        const key = [
-            this.data.type,
-            this.task.id,
-            this.data.timestamp || "",
-            this.task.value || ""
-        ].join("|");
-
-        if (cache.get(key)) {
-            loggerGgsheetGas("⛔ Event dupliqué ignoré");
+    shouldIgnoreTask() {
+        // Ignorer temp-damage
+        if (this.task.alias === "temp-damage") {
+            loggerGgsheetGas("⏭️ temp-damage ignoré (tâche technique)");
             return true;
+
+            // A noter : on peut faire quelque chose de similaire pour toutes les tâches temp si on les nommes en commençant par temp : 
+
         }
 
-        cache.put(key, "1", 5); // 5 secondes
+        // Ignorer les dailies techniques futures si besoin
+        // if (this.task.type === "daily" && this.task.alias?.startsWith("temp-")) {
+        //     loggerGgsheetGas("⏭️ Tâche temporaire ignorée");
+        //     return true;
+        // }
+
         return false;
     }
+
+
+
+    // isDuplicate() {
+    //     const cache = CacheService.getScriptCache();
+
+    //     const key = [
+    //         this.data.type,
+    //         this.task.id,
+    //         this.data.timestamp || "",
+    //         this.task.value || ""
+    //     ].join("|");
+
+    //     if (cache.get(key)) {
+    //         loggerGgsheetGas("⛔ Event dupliqué ignoré");
+    //         return true;
+    //     }
+
+    //     cache.put(key, "1", 5); // 5 secondes
+    //     return false;
+    // }
 }

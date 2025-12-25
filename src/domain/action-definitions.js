@@ -77,44 +77,45 @@ const ACTION_DETAILS = {
         characteristic: "CST",
         successThreshold: 0
     },
+    // Enlevé pour le moment car ça fait péter un câble au déploiement de GAS
 
-    coffrec: {
-        types: {
-            openable
-        },
-        characteristic: "PER",
-        successThreshold: 8
-    },
+    // coffrec: {
+    //     types: {
+    //         openable
+    //     },
+    //     characteristic: "PER",
+    //     successThreshold: 8
+    // },
 
-    coffreb: {
-        types: {
-            openable
-        },
-        characteristic: "PER",
-        successThreshold: 12
-    },
+    // coffreb: {
+    //     types: {
+    //         openable
+    //     },
+    //     characteristic: "PER",
+    //     successThreshold: 12
+    // },
 
-    coffrea: {
-        types: {
-            openable
-        },
-        characteristic: "PER",
-        successThreshold: 16
-    },
+    // coffrea: {
+    //     types: {
+    //         openable
+    //     },
+    //     characteristic: "PER",
+    //     successThreshold: 16
+    // },
 
-    coffres: {
-        types: {
-            openable
-        },
-        characteristic: "PER",
-        successThreshold: 20
-    },
+    // coffres: {
+    //     types: {
+    //         openable
+    //     },
+    //     characteristic: "PER",
+    //     successThreshold: 20
+    // },
 
-    coffress: {
-        types: {
-            openable
-        },
-        characteristic: "PER",
-        successThreshold: 24
-    }
+    // coffress: {
+    //     types: {
+    //         openable
+    //     },
+    //     characteristic: "PER",
+    //     successThreshold: 24
+    // }
 };
