@@ -52,10 +52,18 @@ class PerformAction {
     }
 
     modifyStats() {
+        loggerGgsheetGas("💊 === DÉBUT modifyStats ===");
         const config = this.config;
         const diceTest = config.successThreshold
+        loggerGgsheetGas("💊 successThreshold: " + diceTest);
+        loggerGgsheetGas("💊 modifications: " + JSON.stringify(this.modifications));
         if (!this.modifications) return; //normalement toujours une modification pour modifyStats, mais si jamais...
-        if (diceTest !== 0 && !this.diceSuccess()) return
+        loggerGgsheetGas("❌ ERREUR: modifications est null ou undefined !");
+        if (diceTest !== 0 && !this.diceSuccess()) {
+            loggerGgsheetGas("❌ Test de dé échoué, arrêt");
+
+            return
+        }
 
         loggerGgsheetGas("💊 ModifyStats avec: " + JSON.stringify(this.modifications));
 

@@ -58,7 +58,7 @@ const ACTION_DETAILS = {
     },
 
     // Potions / soins
-    potionsoin: {
+    potiondesoin: {
         types: { stats: { hp: 15 } },
         characteristic: "CST",
         successThreshold: 10 //Test requis potion de soin
