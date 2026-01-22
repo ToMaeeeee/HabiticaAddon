@@ -17,7 +17,8 @@ class ActionCatalog {
     }
 
     executeModifyStats(actionName) {
-        new PerformAction(this.pidGetUser(), this.pidLoadSpecialEquipement(), ACTION_DETAILS[actionName]).modifyStats()
+        const sendMessageLogs = [];  // ✅ Créer le tableau
+        new PerformAction(this.pidGetUser(), this.pidLoadSpecialEquipement(), ACTION_DETAILS[actionName], sendMessageLogs).modifyStats()
     }
 
     executeOpenAction(actionName) {

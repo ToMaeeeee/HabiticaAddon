@@ -56,20 +56,28 @@ class PerformAction {
         const config = this.config;
         const diceTest = config.successThreshold
         loggerGgsheetGas("💊 successThreshold: " + diceTest);
-        loggerGgsheetGas("💊 modifications: " + JSON.stringify(this.modifications));
+
+
+
         if (!this.modifications) return; //normalement toujours une modification pour modifyStats, mais si jamais...
-        loggerGgsheetGas("❌ ERREUR: modifications est null ou undefined !");
+
         if (diceTest !== 0 && !this.diceSuccess()) {
             loggerGgsheetGas("❌ Test de dé échoué, arrêt");
-
+            this.sendMessageLogs.push("❌ Échec de l'action");
+            const finalMessage = this.sendMessageLogs.join("\n");
+            sendMessage(finalMessage);
             return
         }
 
-        loggerGgsheetGas("💊 ModifyStats avec: " + JSON.stringify(this.modifications));
-
         if (!this.hasEnoughResources(this.modifications)) return;
         this.statsManager.handle(this.modifications);
+        this.sendMessageLogs.push("✅ Succès ! Modification des stats appliquée");
+        //Envoie du message
+        const finalMessage = this.sendMessageLogs.join("\n");
+        if (finalMessage.trim() === "") return
+        sendMessage(finalMessage);
     }
+
 
 
     hasEnoughResources(statsModifications) {
@@ -134,7 +142,9 @@ class PerformAction {
 
 
     }
+
 }
+
 
 
 

@@ -8,3 +8,9 @@ const LOGS_SHEET_NAME = "logger"
 
 //ICI LES IDENTIFIANTS DU SHEET AVEC LES MONSTRES DU SHOP → IMPORTATION À PARTIR DU SHEET EXCEL
 const MONSTERS_SHEET_NAME = "Monstres"
+
+//Utile pour le moment dans dealEstimatedDamage
+const RATE_LIMIT_CONFIG = {
+    REQUESTS_PER_BATCH: 20,    // 20 requêtes par batch
+    PAUSE_BETWEEN_BATCHES: 5000 // 5 secondes de pause entre chaque batch
+};
