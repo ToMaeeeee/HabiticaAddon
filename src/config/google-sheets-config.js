@@ -10,7 +10,8 @@ const LOGS_SHEET_NAME = "logger"
 const MONSTERS_SHEET_NAME = "Monstres"
 
 //Utile pour le moment dans dealEstimatedDamage
-const RATE_LIMIT_CONFIG = {
-    REQUESTS_PER_BATCH: 20,    // 20 requêtes par batch
-    PAUSE_BETWEEN_BATCHES: 5000 // 5 secondes de pause entre chaque batch
+const DAMAGE_CONFIG = {
+    CLICKS_PER_BATCH: 10,        // 10 clics par batch
+    PAUSE_BETWEEN_CLICKS: 800,   // 🔥 800ms entre chaque clic (au lieu de 400ms)
+    PAUSE_BETWEEN_BATCHES: 10000 // 🔥 10 secondes entre batches (au lieu de 8s)
 };

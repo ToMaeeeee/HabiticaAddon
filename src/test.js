@@ -1,15 +1,10 @@
-function testAsyncDamageSmall() {
-    loggerGgsheetGas("🧪 Test avec 10 dégâts");
-    dealEstimatedDamage(10);
-    loggerGgsheetGas("⏰ Attends 10-15 secondes et vérifie les logs...");
-}
 
-function testAsyncDamageMedium() {
+
+
+function testDamageMedium() {
     loggerGgsheetGas("🧪 Test avec 50 dégâts");
     dealEstimatedDamage(50);
-    loggerGgsheetGas("⏰ Attends 30-40 secondes et vérifie les logs...");
 }
-
 
 
 function foo1() {

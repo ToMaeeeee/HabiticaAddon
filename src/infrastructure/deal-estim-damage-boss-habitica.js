@@ -1,8 +1,26 @@
-//ESSAI EN ASYNCHRONE pour voir 
+//EN UTILISANT LA CLASS DEFINE DANS LE DOMAIN
+
+function dealEstimatedDamage(damageTarget) {
+    const processor = new DamageProcessor(getUserFromHabiticaUser, new HabiticaAPI())
+    processor.handle(damageTarget);
+}
+
+function processAsyncDamage() {
+    const processor = new DamageProcessor(
+        getUserFromHabiticaUser,
+        new HabiticaAPI()
+    );
+    processor.processAsync();
+}
+
+
+
+
+//ESSAI EN ASYNCHRONE pour voir
 //--------------------------------------------------------------------------------------------------------------------
 //  EN DESSOUS LA VERSION ASYNCHRONE INITIALE DU 22/01/2026 16h48
 //--------------------------------------------------------------------------------------------------------------------
-
+/*
 function dealEstimatedDamage(damageTarget) {
     loggerGgsheetGas("⚔️ DEBUT dealEstimatedDamage");
 
@@ -141,7 +159,7 @@ function deleteOldTriggers(functionName) {
 
 
 
-
+*/
 
 
 //--------------------------------------------------------------------------------------------------------------------
