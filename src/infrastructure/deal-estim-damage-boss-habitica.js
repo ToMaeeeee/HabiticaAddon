@@ -1,17 +1,10 @@
 //EN UTILISANT LA CLASS DEFINE DANS LE DOMAIN
 
 function dealEstimatedDamage(damageTarget) {
-    const processor = new DamageProcessor(getUserFromHabiticaUser, new HabiticaAPI())
-    processor.handle(damageTarget);
+    const damageProcessor = new DamageProcessor(getUserFromHabiticaUser, new HabiticaAPI())
+    damageProcessor.handle(damageTarget);
 }
 
-function processAsyncDamage() {
-    const processor = new DamageProcessor(
-        getUserFromHabiticaUser,
-        new HabiticaAPI()
-    );
-    processor.processAsync();
-}
 
 
 

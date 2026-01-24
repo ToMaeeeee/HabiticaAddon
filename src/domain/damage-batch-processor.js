@@ -1,152 +1,142 @@
 //ESSAI AVEC UNE CLASS POUR VOIR 22/01/2026 21h30
 //--------------------------------------------------------------------------------------------------------------------
+// Version avec triggers chaînés 23/01/26 21:21
+
 class DamageProcessor {
     constructor(getUser, habiticaAPI) {
         this.getUser = getUser;
         this.habiticaAPI = habiticaAPI
+        this.scriptProperties = PropertiesService.getScriptProperties();
     }
 
     handle(damageTarget) {
         loggerGgsheetGas("⚔️ DEBUT DamageProcessor.handle");
 
-        const scriptProperties = PropertiesService.getScriptProperties();
+        const user = this.getUser();
+        const strength = user.getStats().str;
+        const totalClicks = this.estimateClicks(damageTarget, strength);
+
+        loggerGgsheetGas(`📊 ${totalClicks} clics nécessaires pour ${damageTarget} dégâts`);
+
+        const dailyId = this.createTempDaily();
 
         const damageData = {
             damage: damageTarget,
+            totalClicks: totalClicks,
+            clicksDone: 0,
+            dailyId: dailyId,
             timestamp: new Date().getTime(),
             status: 'pending'
         };
 
-        scriptProperties.setProperty('pendingDamage', JSON.stringify(damageData));
-        loggerGgsheetGas(`📦 Dégâts de ${damageTarget} mis en file d'attente`);
-
-        // Créer le trigger
-        ScriptApp.newTrigger('processAsyncDamage')
-            .timeBased()
-            .after(5000) // 5 secondes
-            .create();
-
-        loggerGgsheetGas("⏰ Trigger créé pour traiter les dégâts");
-        loggerGgsheetGas("⚔️ FIN DamageProcessor.handle (délégué)");
+        this.saveDamageData(damageData);
+        const batchCount = Math.ceil(totalClicks / DAMAGE_CONFIG.CLICKS_PER_BATCH);
+        loggerGgsheetGas(`📦 Processus initialisé (${batchCount} trigger(s) nécessaire(s))`);
+        // Créer le premier trigger
+        this.scheduleNextBatch(); //le temps est défini dans config
+        loggerGgsheetGas("FIN DamageProcessor.handle (premier trigger créé)");
     }
 
-    //--------------------------------------------------------------------------------------------------------------------
-
-    processAsync() {
-        loggerGgsheetGas("🔄 === DÉBUT processAsync ===");
-        const scriptProperties = PropertiesService.getScriptProperties();
-        const damageDataStr = scriptProperties.getProperty('pendingDamage');
-
-        if (!damageDataStr) {
-            loggerGgsheetGas("⚠️ Aucun dégât en attente");
-            return;
+    processNextBatch() {
+        loggerGgsheetGas("🔄 DEBUT processNextBatch");
+        const damageData = this.loadDamageData()
+        if (!damageData) {
+            loggerGgsheetGas("⚠️ Aucune donnée");
+            return
         }
+        const clicksDone = damageData.clicksDone
+        const remainingClics = damageData.totalClicks - damageData.clicksDone
+        loggerGgsheetGas(`Status: ${damageData.status}, Clics: ${clicksDone}/${damageData.totalClicks}`);
 
-        const damageData = JSON.parse(damageDataStr);
-
-        if (damageData.status !== 'pending') {
-            loggerGgsheetGas(`⏭️ Dégâts déjà traités (status: ${damageData.status})`);
-            return;
-        }
-
-        loggerGgsheetGas(`⚔️ Traitement de ${damageData.damage} dégâts...`);
-
-        let damageTaskID = null;
 
         try {
-            // Marquer comme "en cours"
-            damageData.status = 'processing';
-            scriptProperties.setProperty('pendingDamage', JSON.stringify(damageData));
+            switch (damageData.status) {
+                case 'finished':
+                    loggerGgsheetGas("Finalisation");
+                    this.finalize(damageData);
+                    return;
 
-            // Créer la daily temporaire
-            damageTaskID = this.createTempDaily();
-
-            // Calculer les clics nécessaires
-            const user = this.getUser();
-            const strength = user.getStats().str;
-            const totalClicks = this.estimateClicks(damageData.damage, strength);
-
-            loggerGgsheetGas(`⚔️ ${totalClicks} clics nécessaires pour ${damageData.damage} dégâts`);
-
-            // 🔥 Effectuer les clics avec des pauses longues
-            this.performClicks(damageTaskID, totalClicks);
-
-            loggerGgsheetGas("✅ Tous les clics effectués");
-            Utilities.sleep(800);
-
-            // Supprimer la daily
-            deleteTask(damageTaskID);
-            loggerGgsheetGas("🗑️ Daily temporaire supprimée");
-
-            // Envoyer le message
-            const message = `⚔️ **Dégâts infligés au boss**\n\n${damageData.damage} points de dégâts !`;
-            sendMessage(message);
-            loggerGgsheetGas("📨 Message de confirmation envoyé");
-
-            // Marquer comme terminé
-            damageData.status = 'completed';
-            scriptProperties.setProperty('pendingDamage', JSON.stringify(damageData));
-
-        } catch (error) {
-            loggerGgsheetGas(`❌ ERREUR: ${error.toString()}`);
-            loggerGgsheetGas(`📋 Stack: ${error.stack}`);
-
-            // Marquer comme failed
-            damageData.status = 'failed';
-            damageData.error = error.toString();
-            scriptProperties.setProperty('pendingDamage', JSON.stringify(damageData));
-
-            // Nettoyer la daily si elle existe
-            if (damageTaskID) {
-                try {
-                    deleteTask(damageTaskID);
-                    loggerGgsheetGas("🗑️ Daily nettoyée après erreur");
-                } catch (cleanupError) {
-                    loggerGgsheetGas(`⚠️ Impossible de nettoyer: ${cleanupError.toString()}`);
-                }
+                case 'failed':
+                    loggerGgsheetGas("❌ Échec détecté, nettoyage");
+                    this.cleanupTriggers()
+                    this.cleanupDaily(damageData.dailyId)
+                    return
+                case 'processing':
+                    loggerGgsheetGas("Déjà en cours");
+                    return
             }
 
-        } finally {
-            this.cleanupTriggers();
+            if (remainingClic <= DAMAGE_CONFIG.CLICKS_PER_BATCH) {
+                //log
+                loggerGgsheetGas(`Dernier batch: ${remainingClics} clics`);
+                damageData.status = 'processing'
+                this.saveDamageData(damageData)
+                this.performClicks(damageData.dailyId, remainingClic)
+                damageData.clicksDone = remainingClic + clicksDone
+                damageData.status = 'finished'
+                this.saveDamageData(damageData)
+                //log
+                loggerGgsheetGas("Dernier batch terminé");
+                return
+            }
+            //log
+            loggerGgsheetGas(`Batch: ${DAMAGE_CONFIG.CLICKS_PER_BATCH} clics`);
+            damageData.status = 'processing'
+            this.saveDamageData(damageData)
+            this.performClicks(damageData.dailyId, DAMAGE_CONFIG.CLICKS_PER_BATCH)
+            damageData.clicksDone = clicksDone + DAMAGE_CONFIG.CLICKS_PER_BATCH
+            damageData.status = 'pending'
+            this.saveDamageData(damageData)
+            //log
+            loggerGgsheetGas(`Batch terminé (${damageData.clicksDone}/${damageData.totalClicks})`);
+            //creer le batch suivant
+            this.scheduleNextBatch();
         }
 
-        loggerGgsheetGas("🔄 === FIN processAsync ===");
+        catch (error) {
+            loggerGgsheetGas(`ERREUR: ${error.toString()}`);
+            damageData.status = 'failed'
+            this.saveDamageData(damageData)
+            this.cleanupTriggers()
+            this.cleanupDaily(damageData.dailyId)
+            return
+        }
+
+        loggerGgsheetGas("FIN processNextBatch");
+
     }
 
 
-    performClicks(taskID, totalClicks) {
-        const batchSize = DAMAGE_CONFIG.CLICKS_PER_BATCH;
-        const totalBatches = Math.ceil(totalClicks / batchSize);
+    scheduleNextBatch() {
+        this.cleanupTriggers()
+        ScriptApp.newTrigger('processNextDamageBatchTrigger').timeBased().after(DAMAGE_CONFIG.PAUSE_BETWEEN_BATCHES).create();
+    }
 
-        loggerGgsheetGas(`📊 ${totalBatches} batch(s) de ${batchSize} clics chacun`);
 
-        for (let batchIndex = 0; batchIndex < totalBatches; batchIndex++) {
-            const batchStart = batchIndex * batchSize;
-            const batchEnd = Math.min((batchIndex + 1) * batchSize, totalClicks);
-            const clicksInBatch = batchEnd - batchStart;
-
-            loggerGgsheetGas(`📦 Batch ${batchIndex + 1}/${totalBatches} : ${clicksInBatch} clics`);
-
-            // Effectuer les clics du batch
-            for (let i = 0; i < clicksInBatch; i++) {
-                this.habiticaAPI.validateTaskHabitica(taskID);
-                this.habiticaAPI.unvalidateTaskHabitica(taskID);
-                Utilities.sleep(DAMAGE_CONFIG.PAUSE_BETWEEN_CLICKS);
-            }
-
-            loggerGgsheetGas(`  ✅ Batch ${batchIndex + 1} terminé (${batchEnd}/${totalClicks} total)`);
-
-            // 🔥 PAUSE LONGUE entre les batches (sauf après le dernier)
-            if (batchIndex < totalBatches - 1) {
-                loggerGgsheetGas(`  ⏸️ Pause de ${DAMAGE_CONFIG.PAUSE_BETWEEN_BATCHES}ms...`);
-                Utilities.sleep(DAMAGE_CONFIG.PAUSE_BETWEEN_BATCHES);
-            }
+    performClicks(dailyId, clicks) {
+        loggerGgsheetGas(`Début ${clicks} clics`);
+        for (let i = 0; i < clicks; i++) {
+            this.habiticaAPI.validateTaskHabitica(dailyId);
+            Utilities.sleep(400)
+            this.habiticaAPI.unvalidateTaskHabitica(dailyId);
+            Utilities.sleep(DAMAGE_CONFIG.PAUSE_BETWEEN_CLICKS)
         }
     }
 
     estimateClicks(damageTarget, strength) {
         const damagePerClick = 1 + strength * 0.005;
         return Math.ceil(damageTarget / damagePerClick);
+    }
+
+    finalize(damageData) {
+        loggerGgsheetGas("Finalisation des dégâts et envoie du message");
+        const message = `**Dégâts infligés au boss**\n\n${damageData.damage} points de dégâts !\n\n✅ ${damageData.totalClicks} clics effectués`;
+        sendMessage(message);
+        loggerGgsheetGas("Message envoyé");
+        this.cleanupDaily(this.loadDamageData().dailyId)
+        this.cleanupTriggers();
+        this.scriptProperties.deleteProperty('pendingDamage');
+        loggerGgsheetGas("✅ Processus terminé");
     }
 
     createTempDaily() {
@@ -156,22 +146,34 @@ class DamageProcessor {
         return damageTask.id;
     }
 
-
     cleanupTriggers() {
         const triggers = ScriptApp.getProjectTriggers();
-        let deletedCount = 0;
-
         triggers.forEach(trigger => {
-            if (trigger.getHandlerFunction() === 'processAsyncDamage') {
+            if (trigger.getHandlerFunction() === 'processNextDamageBatchTrigger') {
                 ScriptApp.deleteTrigger(trigger);
-                deletedCount++;
             }
         });
-
-        if (deletedCount > 0) {
-            loggerGgsheetGas(`🗑️ ${deletedCount} trigger(s) nettoyé(s)`);
-        }
-
     }
 
+    cleanupDaily(dailyId) {
+        deleteTask(dailyId);
+    }
+
+
+    saveDamageData(damageData) {
+        this.scriptProperties.setProperty('pendingDamage', JSON.stringify(damageData));
+    }
+
+    loadDamageData() {
+        const dataStr = this.scriptProperties.getProperty('pendingDamage');
+        return dataStr ? JSON.parse(dataStr) : null;
+    }
+
+
+}
+
+//fonction standalone qui gère l'interface entre la classe et les triggers
+function processNextDamageBatchTrigger() {
+    const damageProcessor = new DamageProcessor(getUserFromHabiticaUser, new HabiticaAPI());
+    damageProcessor.processNextBatch()
 }
