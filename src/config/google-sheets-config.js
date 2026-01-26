@@ -12,6 +12,7 @@ const MONSTERS_SHEET_NAME = "Monstres"
 //Utile pour le moment dans dealEstimatedDamage
 const DAMAGE_CONFIG = {
     CLICKS_PER_BATCH: 10,        // 10 clics par batch
-    PAUSE_BETWEEN_CLICKS: 800,   // 🔥 800ms entre chaque clic (au lieu de 400ms)
-    PAUSE_BETWEEN_BATCHES: 8000 // 🔥 8 secondes entre batches (au lieu de 8s)
+    PAUSE_BETWEEN_CLICKS: 1000,   // 🔥 entre deux séries de clic/unclic
+    PAUSE_BETWEEN_BATCHES: 8000, // 🔥 8 secondes entre batches (au lieu de 8s)
+    PAUSE_BETWEEN_VALIDATE_UNVALIDATE: 800
 };

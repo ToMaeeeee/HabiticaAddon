@@ -66,17 +66,18 @@ class DamageProcessor {
                     return
             }
 
-            if (remainingClic <= DAMAGE_CONFIG.CLICKS_PER_BATCH) {
+            if (remainingClics <= DAMAGE_CONFIG.CLICKS_PER_BATCH) {
                 //log
                 loggerGgsheetGas(`Dernier batch: ${remainingClics} clics`);
                 damageData.status = 'processing'
                 this.saveDamageData(damageData)
-                this.performClicks(damageData.dailyId, remainingClic)
-                damageData.clicksDone = remainingClic + clicksDone
+                this.performClicks(damageData.dailyId, remainingClics)
+                damageData.clicksDone = damageData.totalClicks
                 damageData.status = 'finished'
                 this.saveDamageData(damageData)
                 //log
                 loggerGgsheetGas("Dernier batch terminé");
+                this.scheduleNextBatch();
                 return
             }
             //log
@@ -117,7 +118,7 @@ class DamageProcessor {
         loggerGgsheetGas(`Début ${clicks} clics`);
         for (let i = 0; i < clicks; i++) {
             this.habiticaAPI.validateTaskHabitica(dailyId);
-            Utilities.sleep(400)
+            Utilities.sleep(DAMAGE_CONFIG.PAUSE_BETWEEN_VALIDATE_UNVALIDATE)
             this.habiticaAPI.unvalidateTaskHabitica(dailyId);
             Utilities.sleep(DAMAGE_CONFIG.PAUSE_BETWEEN_CLICKS)
         }
@@ -142,7 +143,6 @@ class DamageProcessor {
     createTempDaily() {
         const tempDaily = new Daily("temp-damage", "Dégâts temporaires", "Daily technique", 0.1);
         const damageTask = this.habiticaAPI.createNewDaily(tempDaily);
-        loggerGgsheetGas(`📝 Daily créée: ${damageTask.id}`);
         return damageTask.id;
     }
 

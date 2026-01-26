@@ -17,38 +17,28 @@ class PerformAction {
         const diceTest = config.successThreshold
         if (!config) throw new Error(`Action inconnue`);
         //Echec du test de touche : on return (sans consommer de ressources)
-        if (diceTest !== 0 && !this.diceSuccess()) return
-        loggerGgsheetGas("✅ Test de touche réussi, calcul des dégâts...");
+        if (diceTest !== 0 && !this.diceSuccess()) {
+            // ✅ En cas d'échec, on envoie quand même le message
+            const finalMessage = this.sendMessageLogs.join("\n");
+            sendMessage(finalMessage);
+            return
+        }
+        loggerGgsheetGas("✅ Test de touche réussi");
         // Vérifier qu'assez de ressources
         if (this.modifications) {
             if (!this.hasEnoughResources(this.modifications)) return;
             this.statsManager.handle(this.modifications);
         }
 
+        // ✅ Envoyer message de succès du test
+        const successMessage = this.sendMessageLogs.join("\n");
+        sendMessage(successMessage);
+
         //Effectuer dégats
         const damage = rollDice(config.types.damage.dice);
-
         loggerGgsheetGas(`🎲 Dégâts calculés: ${damage}`);
-        loggerGgsheetGas("⚔️ AVANT dealEstimatedDamage");
-
         dealEstimatedDamage(damage);
-        loggerGgsheetGas("⚔️ APRÈS dealEstimatedDamage");
-        this.sendMessageLogs.push(`Succès ! Dégâts infligés : ${damage}`);
-        loggerGgsheetGas("✅ Succès ajouté, damage: " + damage);
-
-
-        loggerGgsheetGas("📤 AVANT formatage message final");
-        const finalMessage = this.sendMessageLogs.join("\n");
-        loggerGgsheetGas("📤 Message formaté: " + finalMessage);
-
-        // ✅ Vérifier que le message n'est pas vide
-        if (finalMessage.trim() === "") {
-            loggerGgsheetGas("⚠️ ATTENTION: Message vide, on n'envoie rien");
-            return;
-        }
-        loggerGgsheetGas("📨 AVANT sendMessage");
-        sendMessage(finalMessage);
-        loggerGgsheetGas("✅ sendMessage() a été appelé");
+        loggerGgsheetGas("⚔️ Dégâts délégués au DamageProcessor");
     }
 
     modifyStats() {
