@@ -41,22 +41,6 @@ class BuyableDispatcher {
 
         // Reçoit un alias qui commence par "item" → déclenche une action
         if (alias.startsWith("item-")) {
-
-            //----------------------PARTIE DE TEST A ENLEVER ENSUITE-----------------------------------------
-            /*
-            const key = alias.replace("item-", "");
-            if (this.isTest) {
-                loggerGgsheetGas(JSON.stringify(data));
-                if (DAILY_BUYABLE_ACTIONS[key]) {
-                    loggerGgsheetGas(`✅ [TEST] Action reconnue : "${key}"`);
-                } else {
-                    loggerGgsheetGas(`❌ [TEST] Action inconnue : "${key}"`);
-                }
-                return;
-            }
-                */
-            //--------------------------------------------------------------------------------------------------------------------
-
             const actionName = alias.replace("item-", "");
             const action = DAILY_BUYABLE_ACTIONS[actionName]
             if (action) {

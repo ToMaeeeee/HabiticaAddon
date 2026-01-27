@@ -7,6 +7,3 @@ function mountApplication() {
     }
     return application
 }
-
-
-
